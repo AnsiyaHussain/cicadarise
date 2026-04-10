@@ -1,0 +1,184 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist - CICADA RISE</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --accent: #C0A848;
+            --dark-brown: #471801;
+            --deep-brown: #5e2903;
+            --light-beige: #c2ad9e;
+        }
+        
+        body {
+            background-
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        
+        .wishlist-header {
+            background: linear-gradient(135deg, var(--bs-primary), var(--heading-color));
+            color: white;
+            padding: 80px 0 60px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(71, 24, 1, 0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(71, 24, 1, 0.15);
+        }
+        
+        .product-image {
+            height: 280px;
+            object-fit: cover;
+        }
+        
+        .btn-remove {
+            background-
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-remove:hover {
+            background-
+            transform: translateY(-2px);
+        }
+        
+        .empty-state {
+            padding: 80px 20px;
+        }
+    </style>
+</head>
+<body>
+{% include 'navbar.html' %}
+
+
+<div class="container py-5">
+    {% if products %}
+    <div class="row g-4">
+        {% for product in products %}
+        <div class="col-md-6 col-lg-4">
+            <div class="product-card">
+                <!-- Product Image -->
+                <div class="position-relative">
+                    <a href="{% url 'product_detail' product.id %}">
+                        <img src="{{ product.image.url }}" 
+                             alt="{{ product.name }}" 
+                             class="product-image w-100">
+                    </a>
+                    
+                    <!-- Heart Icon (filled) -->
+                    <div class="position-absolute top-0 end-0 m-3">
+                        <i class="fas fa-heart fa-2x" ></i>
+                    </div>
+                </div>
+
+                <!-- Product Details -->
+                <div class="p-4">
+                    <h5 class="fw-semibold mb-2" style="color: var(--heading-color);">
+                        <a href="{% url 'product_detail' product.id %}" 
+                           class="text-decoration-none" style="color: inherit;">
+                            {{ product.name }}
+                        </a>
+                    </h5>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="fs-4 fw-bold" style="color: var(--bs-primary);">₹{{ product.price }}</span>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <!-- Add to Cart -->
+                        <form action="{% url 'add_to_cart' %}" method="post" style="flex: 1;">
+                            {% csrf_token %}
+                            <input type="hidden" name="product" value="{{ product.id }}">
+                            <button type="submit" class="btn w-100" 
+                                    style="background-color: var(--bs-primary); ">
+                                <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                            </button>
+                        </form>
+
+                        <!-- Remove from Wishlist -->
+                        <button onclick="removeFromWishlist({{ product.id }}, this)" 
+                                class="btn btn-remove">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <!-- Empty Wishlist State -->
+    <div class="text-center empty-state">
+        <i class="far fa-heart fa-5x mb-4" ></i>
+        <h3 style="color: var(--heading-color);">Your Wishlist is Empty</h3>
+        <p class="text-muted mb-4">Save your favorite products here for later</p>
+        <a href="{% url 'shop' %}" class="btn btn-lg px-5" 
+           style="background-color: var(--bs-primary); color: white; border-radius: 50px;">
+            Browse Our Collection
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+function removeFromWishlist(productId, btn) {
+    if (!confirm("Remove this item from wishlist?")) return;
+
+    fetch(`/add-to-wishlist/${productId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'removed') {
+            // Remove the card with smooth animation
+            const card = btn.closest('.col-md-6');
+            card.style.transition = 'all 0.4s ease';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                card.remove();
+                
+                // Check if wishlist is now empty
+                if (document.querySelectorAll('.col-md-6').length === 0) {
+                    location.reload(); // Refresh to show empty state
+                }
+            }, 400);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Something went wrong. Please try again.');
+    });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,988 @@
+{% load static %}
+{% load cart %}
+{% load custom_filter %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>CICADA RISE</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome - IMPORTANT for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Your other CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/vendor.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Marcellus&display=swap" rel="stylesheet">
+</head>
+
+<body class="homepage" style="background-color: #ece1d2;;">
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <defs>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="instagram" viewBox="0 0 15 15">
+        <path fill="none" stroke="currentColor"
+          d="M11 3.5h1M4.5.5h6a4 4 0 0 1 4 4v6a4 4 0 0 1-4 4h-6a4 4 0 0 1-4-4v-6a4 4 0 0 1 4-4Zm3 10a3 3 0 1 1 0-6a3 3 0 0 1 0 6Z" >
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="facebook" viewBox="0 0 15 15">
+        <path fill="none" stroke="currentColor"
+          d="M7.5 14.5a7 7 0 1 1 0-14a7 7 0 0 1 0 14Zm0 0v-8a2 2 0 0 1 2-2h.5m-5 4h5" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="twitter" viewBox="0 0 15 15">
+        <path fill="currentColor"
+          d="m14.478 1.5l.5-.033a.5.5 0 0 0-.871-.301l.371.334Zm-.498 2.959a.5.5 0 1 0-1 0h1Zm-6.49.082h-.5h.5Zm0 .959h.5h-.5Zm-6.99 7V12a.5.5 0 0 0-.278.916L.5 12.5Zm.998-11l.469-.175a.5.5 0 0 0-.916-.048l.447.223Zm3.994 9l.354.353a.5.5 0 0 0-.195-.827l-.159.474Zm7.224-8.027l-.37.336l.18.199l.265-.04l-.075-.495Zm1.264-.94c.051.778.003 1.25-.123 1.606c-.122.345-.336.629-.723 1l.692.722c.438-.42.776-.832.974-1.388c.193-.546.232-1.178.177-2.006l-.998.066Zm0 3.654V4.46h-1v.728h1Zm-6.99-.646V5.5h1v-.959h-1Zm0 .959V6h1v-.5h-1ZM10.525 1a3.539 3.539 0 0 0-3.537 3.541h1A2.539 2.539 0 0 1 10.526 2V1Zm2.454 4.187C12.98 9.503 9.487 13 5.18 13v1c4.86 0 8.8-3.946 8.8-8.813h-1ZM1.03 1.675C1.574 3.127 3.614 6 7.49 6V5C4.174 5 2.421 2.54 1.966 1.325l-.937.35Zm.021-.398C.004 3.373-.157 5.407.604 7.139c.759 1.727 2.392 3.055 4.73 3.835l.317-.948c-2.155-.72-3.518-1.892-4.132-3.29c-.612-1.393-.523-3.11.427-5.013l-.895-.446Zm4.087 8.87C4.536 10.75 2.726 12 .5 12v1c2.566 0 4.617-1.416 5.346-2.147l-.708-.706Zm7.949-8.009A3.445 3.445 0 0 0 10.526 1v1c.721 0 1.37.311 1.82.809l.74-.671Zm-.296.83a3.513 3.513 0 0 0 2.06-1.134l-.744-.668a2.514 2.514 0 0 1-1.466.813l.15.989ZM.222 12.916C1.863 14.01 3.583 14 5.18 14v-1c-1.63 0-3.048-.011-4.402-.916l-.556.832Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="pinterest" viewBox="0 0 15 15">
+        <path fill="none" stroke="currentColor"
+          d="m4.5 13.5l3-7m-3.236 3a2.989 2.989 0 0 1-.764-2V7A3.5 3.5 0 0 1 7 3.5h1A3.5 3.5 0 0 1 11.5 7v.5a3 3 0 0 1-3 3a2.081 2.081 0 0 1-1.974-1.423L6.5 9m1 5.5a7 7 0 1 1 0-14a7 7 0 0 1 0 14Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="youtube" viewBox="0 0 15 15">
+        <path fill="currentColor"
+          d="m1.61 12.738l-.104.489l.105-.489Zm11.78 0l.104.489l-.105-.489Zm0-10.476l.104-.489l-.105.489Zm-11.78 0l.106.489l-.105-.489ZM6.5 5.5l.277-.416A.5.5 0 0 0 6 5.5h.5Zm0 4H6a.5.5 0 0 0 .777.416L6.5 9.5Zm3-2l.277.416a.5.5 0 0 0 0-.832L9.5 7.5ZM0 3.636v7.728h1V3.636H0Zm15 7.728V3.636h-1v7.728h1ZM1.506 13.227c3.951.847 8.037.847 11.988 0l-.21-.978a27.605 27.605 0 0 1-11.568 0l-.21.978ZM13.494 1.773a28.606 28.606 0 0 0-11.988 0l.21.978a27.607 27.607 0 0 1 11.568 0l.21-.978ZM15 3.636c0-.898-.628-1.675-1.506-1.863l-.21.978c.418.09.716.458.716.885h1Zm-1 7.728a.905.905 0 0 1-.716.885l.21.978A1.905 1.905 0 0 0 15 11.364h-1Zm-14 0c0 .898.628 1.675 1.506 1.863l.21-.978A.905.905 0 0 1 1 11.364H0Zm1-7.728c0-.427.298-.796.716-.885l-.21-.978A1.905 1.905 0 0 0 0 3.636h1ZM6 5.5v4h1v-4H6Zm.777 4.416l3-2l-.554-.832l-3 2l.554.832Zm3-2.832l-3-2l-.554.832l3 2l.554-.832Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="dribble" viewBox="0 0 15 15">
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+          d="M4.839 1.024c3.346 4.041 5.096 7.922 5.704 12.782M.533 6.82c5.985-.138 9.402-1.083 11.97-4.216M2.7 12.594c3.221-4.902 7.171-5.65 11.755-4.293M14.5 7.5a7 7 0 1 0-14 0a7 7 0 0 0 14 0Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="calendar" viewBox="0 0 24 24">
+        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+          <rect width="20" height="18" x="2" y="4" rx="4" />
+          <path d="M8 2v4m8-4v4M2 10h20" />
+        </g>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="shopping-bag" viewBox="0 0 24 24">
+        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+          <path
+            d="M3.977 9.84A2 2 0 0 1 5.971 8h12.058a2 2 0 0 1 1.994 1.84l.803 10A2 2 0 0 1 18.833 22H5.167a2 2 0 0 1-1.993-2.16l.803-10Z" />
+          <path d="M16 11V6a4 4 0 0 0-4-4v0a4 4 0 0 0-4 4v5" />
+        </g>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="gift" viewBox="0 0 24 24">
+        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+          <rect width="18" height="14" x="3" y="8" rx="2" />
+          <path d="M12 5a3 3 0 1 0-3 3m6 0a3 3 0 1 0-3-3m0 0v17m9-7H3" />
+        </g>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="arrow-cycle" viewBox="0 0 24 24">
+        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+          <path
+            d="M22 12c0 6-4.39 10-9.806 10C7.792 22 4.24 19.665 3 16m-1-4C2 6 6.39 2 11.806 2C16.209 2 19.76 4.335 21 8" />
+          <path d="m7 17l-4-1l-1 4M17 7l4 1l1-4" />
+        </g>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="link" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M12 19a1 1 0 1 0-1-1a1 1 0 0 0 1 1Zm5 0a1 1 0 1 0-1-1a1 1 0 0 0 1 1Zm0-4a1 1 0 1 0-1-1a1 1 0 0 0 1 1Zm-5 0a1 1 0 1 0-1-1a1 1 0 0 0 1 1Zm7-12h-1V2a1 1 0 0 0-2 0v1H8V2a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3Zm1 17a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-9h16Zm0-11H4V6a1 1 0 0 1 1-1h1v1a1 1 0 0 0 2 0V5h8v1a1 1 0 0 0 2 0V5h1a1 1 0 0 1 1 1ZM7 15a1 1 0 1 0-1-1a1 1 0 0 0 1 1Zm0 4a1 1 0 1 0-1-1a1 1 0 0 0 1 1Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="arrow-left" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M17 11H9.41l3.3-3.29a1 1 0 1 0-1.42-1.42l-5 5a1 1 0 0 0-.21.33a1 1 0 0 0 0 .76a1 1 0 0 0 .21.33l5 5a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.42L9.41 13H17a1 1 0 0 0 0-2Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="arrow-right" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M17.92 11.62a1 1 0 0 0-.21-.33l-5-5a1 1 0 0 0-1.42 1.42l3.3 3.29H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l5-5a1 1 0 0 0 .21-.33a1 1 0 0 0 0-.76Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="play" viewBox="0 0 24 24">
+        <g fill="none" fill-rule="evenodd">
+          <path
+            d="M24 0v24H0V0h24ZM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018Zm.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022Zm-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01l-.184-.092Z" />
+          <path fill="currentColor"
+            d="M5.669 4.76a1.469 1.469 0 0 1 2.04-1.177c1.062.454 3.442 1.533 6.462 3.276c3.021 1.744 5.146 3.267 6.069 3.958c.788.591.79 1.763.001 2.356c-.914.687-3.013 2.19-6.07 3.956c-3.06 1.766-5.412 2.832-6.464 3.28c-.906.387-1.92-.2-2.038-1.177c-.138-1.142-.396-3.735-.396-7.237c0-3.5.257-6.092.396-7.235Z" />
+        </g>
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="category" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M19 5.5h-6.28l-.32-1a3 3 0 0 0-2.84-2H5a3 3 0 0 0-3 3v13a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-10a3 3 0 0 0-3-3Zm1 13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-13a1 1 0 0 1 1-1h4.56a1 1 0 0 1 .95.68l.54 1.64a1 1 0 0 0 .95.68h7a1 1 0 0 1 1 1Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="calendar" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M19 4h-2V3a1 1 0 0 0-2 0v1H9V3a1 1 0 0 0-2 0v1H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3Zm1 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7h16Zm0-9H4V7a1 1 0 0 1 1-1h2v1a1 1 0 0 0 2 0V6h6v1a1 1 0 0 0 2 0V6h2a1 1 0 0 1 1 1Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="heart" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M20.16 4.61A6.27 6.27 0 0 0 12 4a6.27 6.27 0 0 0-8.16 9.48l7.45 7.45a1 1 0 0 0 1.42 0l7.45-7.45a6.27 6.27 0 0 0 0-8.87Zm-1.41 7.46L12 18.81l-6.75-6.74a4.28 4.28 0 0 1 3-7.3a4.25 4.25 0 0 1 3 1.25a1 1 0 0 0 1.42 0a4.27 4.27 0 0 1 6 6.05Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="plus" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M19 11h-6V5a1 1 0 0 0-2 0v6H5a1 1 0 0 0 0 2h6v6a1 1 0 0 0 2 0v-6h6a1 1 0 0 0 0-2Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="minus" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M19 11H5a1 1 0 0 0 0 2h14a1 1 0 0 0 0-2Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="cart" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M8.5 19a1.5 1.5 0 1 0 1.5 1.5A1.5 1.5 0 0 0 8.5 19ZM19 16H7a1 1 0 0 1 0-2h8.491a3.013 3.013 0 0 0 2.885-2.176l1.585-5.55A1 1 0 0 0 19 5H6.74a3.007 3.007 0 0 0-2.82-2H3a1 1 0 0 0 0 2h.921a1.005 1.005 0 0 1 .962.725l.155.545v.005l1.641 5.742A3 3 0 0 0 7 18h12a1 1 0 0 0 0-2Zm-1.326-9l-1.22 4.274a1.005 1.005 0 0 1-.963.726H8.754l-.255-.892L7.326 7ZM16.5 19a1.5 1.5 0 1 0 1.5 1.5a1.5 1.5 0 0 0-1.5-1.5Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="check" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M18.71 7.21a1 1 0 0 0-1.42 0l-7.45 7.46l-3.13-3.14A1 1 0 1 0 5.29 13l3.84 3.84a1 1 0 0 0 1.42 0l8.16-8.16a1 1 0 0 0 0-1.47Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="trash" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M10 18a1 1 0 0 0 1-1v-6a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1ZM20 6h-4V5a3 3 0 0 0-3-3h-2a3 3 0 0 0-3 3v1H4a1 1 0 0 0 0 2h1v11a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V8h1a1 1 0 0 0 0-2ZM10 5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1h-4Zm7 14a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8h10Zm-3-1a1 1 0 0 0 1-1v-6a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="star-outline" viewBox="0 0 15 15">
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+          d="M7.5 9.804L5.337 11l.413-2.533L4 6.674l2.418-.37L7.5 4l1.082 2.304l2.418.37l-1.75 1.793L9.663 11L7.5 9.804Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="star-solid" viewBox="0 0 15 15">
+        <path fill="currentColor"
+          d="M7.953 3.788a.5.5 0 0 0-.906 0L6.08 5.85l-2.154.33a.5.5 0 0 0-.283.843l1.574 1.613l-.373 2.284a.5.5 0 0 0 .736.518l1.92-1.063l1.921 1.063a.5.5 0 0 0 .736-.519l-.373-2.283l1.574-1.613a.5.5 0 0 0-.283-.844L8.921 5.85l-.968-2.062Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="search" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="user" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M15.71 12.71a6 6 0 1 0-7.42 0a10 10 0 0 0-6.22 8.18a1 1 0 0 0 2 .22a8 8 0 0 1 15.9 0a1 1 0 0 0 1 .89h.11a1 1 0 0 0 .88-1.1a10 10 0 0 0-6.25-8.19ZM12 12a4 4 0 1 1 4-4a4 4 0 0 1-4 4Z" />
+      </symbol>
+      <symbol xmlns="http://www.w3.org/2000/svg" id="close" viewBox="0 0 15 15">
+        <path fill="currentColor"
+          d="M7.953 3.788a.5.5 0 0 0-.906 0L6.08 5.85l-2.154.33a.5.5 0 0 0-.283.843l1.574 1.613l-.373 2.284a.5.5 0 0 0 .736.518l1.92-1.063l1.921 1.063a.5.5 0 0 0 .736-.519l-.373-2.283l1.574-1.613a.5.5 0 0 0-.283-.844L8.921 5.85l-.968-2.062Z" />
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="preloader text-white fs-6 text-uppercase overflow-hidden"></div>
+
+  <div class="search-popup">
+    <div class="search-popup-container">
+
+<form role="search" method="get" class="form-group" action="{% url 'index' %}">
+          <input type="search" id="search-form" class="form-control border-0 border-bottom"
+          placeholder="Type and press enter" value="" name="s" />
+        <button type="submit" class="search-submit border-0 position-absolute bg-white"
+          style="top: 15px;right: 15px;"><svg class="search" width="24" height="24">
+            <use xlink:href="#search"></use>
+          </svg></button>
+      </form>
+
+      <h5 class="cat-list-title" >Browse Categories</h5>
+
+      <ul class="cat-list" >
+        <li class="cat-list-item" >
+          <a href="#" title="Jackets" >Jackets</a>
+        </li>
+        <li class="cat-list-item">
+          <a href="#" title="T-shirts" >T-shirts</a>
+        </li>
+        <li class="cat-list-item">
+          <a href="#" title="Handbags" >Handbags</a>
+        </li>
+        <li class="cat-list-item">
+          <a href="#" title="Accessories" >Accessories</a>
+        </li>
+        <li class="cat-list-item">
+          <a href="#" title="Cosmetics" >Cosmetics</a>
+        </li>
+        <li class="cat-list-item">
+          <a href="#" title="Dresses" >Dresses</a>
+        </li>
+        <li class="cat-list-item">
+          <a href="#" title="Jumpsuits" >Jumpsuits</a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+<!-- Fixed Side Cart (Offcanvas) -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
+  <div class="offcanvas-header border-bottom">
+    <h5 class="offcanvas-title text-uppercase fw-bold" id="offcanvasCartLabel">Your Cart</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  
+  <div class="offcanvas-body p-0 d-flex flex-column">
+    
+    {% if cart and cart|length > 0 %}
+      <!-- Cart Items -->
+      <div class="list-group list-group-flush flex-grow-1">
+        {% for product_id, quantity in cart.items %}
+          {% with product=product_id|product_from_id %}
+            {% if product %}
+            <div class="list-group-item d-flex gap-3 py-3 border-bottom">
+              {% if product.image %}
+                <img src="{{ product.image.url }}" 
+                     alt="{{ product.name }}" 
+                     class="rounded" 
+                     style="width: 70px; height: 70px; object-fit: cover;">
+              {% endif %}
+              
+              <div class="flex-grow-1">
+                <h6 class="mb-1 fw-medium">{{ product.name }}</h6>
+                <small class="text-muted">
+                  Qty: {{ quantity }} × ₹{{ product.price }}
+                </small>
+              </div>
+              
+              <div class="text-end">
+                <strong>₹{{ product.price|multiply:quantity }}</strong>
+              </div>
+            </div>
+            {% endif %}
+          {% endwith %}
+        {% endfor %}
+      </div>
+
+      <!-- Footer Actions -->
+      <div class="p-4 border-top mt-auto">
+        <a href="{% url 'cart' %}" class="btn btn-dark w-100 py-3 text-uppercase rounded-pill mb-2">
+          View Full Cart
+        </a>
+        <a href="{% url 'checkout' %}" class="btn btn-outline-dark w-100 py-3 text-uppercase rounded-pill">
+          Proceed to Checkout
+        </a>
+      </div>
+
+    {% else %}
+      <!-- Empty Cart State -->
+      <div class="text-center py-5 d-flex flex-column justify-content-center h-100">
+        <i class="fas fa-shopping-bag fa-4x mb-4 text-muted"></i>
+        <h5 class="mb-2">Your cart is empty</h5>
+        <p class="text-muted px-4">Start adding beautiful pieces to your cart</p>
+        <button class="btn btn-dark mt-4 px-5 py-2" data-bs-dismiss="offcanvas">
+          Continue Shopping
+        </button>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% load static %}
+
+{% include 'navbar.html' %}
+
+<!-- Dynamic Category Banner Swiper - Improved -->
+<section id="billboard" class="py-5" style="min-height: 85vh; display: flex; align-items: center; justify-content: center; background-color: #ece1d2;">
+  <div class="container text-center">
+    <div class="row justify-content-center">
+      <div class="col-12" data-aos="fade-up" data-aos-duration="1000">
+        <h1 class="section-title mt-4 text-uppercase" 
+            style="font-family: var(--heading-font); letter-spacing: 6px; font-size: clamp(2.8rem, 7vw, 5rem); font-weight: 300; color: #592518;">
+          <span style="font-weight: bold;">CICADA</span> 
+          <span style="font-style: italic; font-weight: bold;">RISE</span>
+        </h1>
+        <p class="fst-italic mt-3" style="font-family: var(--heading-font); font-size: clamp(1.1rem, 2.8vw, 1.7rem); color: #4a3e3d;">
+          Like the cicada, every woman deserves her moment to emerge
+        </p>
+      </div>
+    </div>
+
+    <!-- Category Banner Swiper -->
+<!-- Category Swiper -->
+    <div class="swiper main-swiper" data-aos="fade-up" data-aos-delay="400">
+      <div class="swiper-wrapper">
+
+        {% for category in categories %}
+        <div class="swiper-slide px-2">
+          <div class="banner-item position-relative rounded-4 overflow-hidden shadow-sm">
+            <a href="{% url 'shop' %}?category={{ category.id }}">
+              {% if category.image %}
+                <img src="{{ category.image.url }}" 
+                     alt="{{ category.name }}" 
+                     class="img-fluid w-100"
+                     style="height: 420px; object-fit: cover;">
+              {% else %}
+                <img src="{% static 'images/banner-image-1.jpg' %}" 
+                     alt="{{ category.name }}" 
+                     class="img-fluid w-100"
+                     style="height: 420px; object-fit: cover;">
+              {% endif %}
+            </a>
+
+            <!-- Elegant Category Name Overlay -->
+            <div class="position-absolute bottom-0 start-0 w-100 py-5 px-4"
+                 style="background: linear-gradient(to top, rgba(89,37,24,0.85), transparent 40%);">
+              <h5 class="text-white text-uppercase fw-medium mb-0 text-center"
+                  style="font-family: var(--heading-font); 
+                         font-size: clamp(1.25rem, 4.5vw, 1.6rem); 
+                         letter-spacing: 3px; 
+                         text-shadow: 0 3px 12px rgba(0,0,0,0.6);">
+                {{ category.name }}
+              </h5>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>        
+        <!-- Swiper Pagination -->
+        <div class="swiper-pagination mt-4"></div>
+      </div>
+
+      <!-- Arrow Buttons -->
+      <div class="icon-arrow icon-arrow-left" style="margin-top: 180px;">
+        <svg width="50" height="50" viewBox="0 0 24 24">
+          <use xlink:href="#arrow-left"></use>
+        </svg>
+      </div>
+      <div class="icon-arrow icon-arrow-right" style="margin-top: 180px;">
+        <svg width="50" height="50" viewBox="0 0 24 24">
+          <use xlink:href="#arrow-right"></use>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Category Banner Improvements */
+.main-swiper .swiper-slide {
+  padding: 0 8px;
+}
+
+@media (max-width: 576px) {
+  .banner-item .banner-content {
+    py-3;           /* less padding on very small screens */
+  }
+  
+  .main-swiper .swiper-slide {
+    padding: 0 4px;
+  }
+}
+</style>
+  <section class="features py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 text-center" data-aos="fade-in" data-aos-delay="0">
+          <div class="py-5">
+            <svg width="38" height="38" viewBox="0 0 24 24" >
+              <use xlink:href="#user"></use>
+            </svg>
+            <h4 class="element-title text-capitalize my-3" >Size Assistance</h4>
+            <p >Find Your Perfect Fit with our detailed size guides and dedicated styling team.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-3 text-center" data-aos="fade-in" data-aos-delay="300">
+          <div class="py-5">
+            <svg width="38" height="38" viewBox="0 0 24 24" >
+              <use xlink:href="#shopping-bag"></use>
+            </svg>
+            <h4 class="element-title text-capitalize my-3" >Fast Delivery</h4>
+            <p >Enjoy fast, reliable shipping right to your doorstep, with real-time tracking.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-3 text-center" data-aos="fade-in" data-aos-delay="600">
+          <div class="py-5">
+            <svg width="38" height="38" viewBox="0 0 24 24" >
+              <use xlink:href="#arrow-cycle"></use>
+            </svg>
+            <h4 class="element-title text-capitalize my-3" >Return & Exchange</h4>
+            <p >Shop with confidence. Effortless 14-day returns and exchanges if it's not a
+              perfect match.</p>
+          </div>
+        </div>
+        <div class="col-md-3 text-center" data-aos="fade-in" data-aos-delay="900">
+          <div class="py-5">
+            <svg width="38" height="38" viewBox="0 0 24 24" >
+              <use xlink:href="#check"></use>
+            </svg>
+            <h4 class="element-title text-capitalize my-3" >WhatsApp Support</h4>
+            <p >Chat with our friendly support team directly on WhatsApp for quick assistance.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+<!-- New Arrivals - Professional Grid with Proper Wishlist Heart -->
+<section id="new-arrival" class="new-arrival product-carousel py-5 position-relative overflow-hidden" 
+         style="background-color: #ece1d2;">
+  <div class="container">
+    
+    <!-- Section Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-5">
+      <div>
+        <h2 class="section-title text-uppercase fw-light" 
+            style="font-family: var(--heading-font); color: #592518; letter-spacing: 4px; font-size: 2.1rem;">
+          New Arrivals
+        </h2>
+        <p class="text-muted fst-italic mb-0" style="font-size: 1.05rem;">
+          Freshly emerged pieces for the modern woman
+        </p>
+      </div>
+      <a href="{% url 'shop' %}" class="btn-link text-uppercase fw-medium" 
+         style="color: #592518; font-size: 0.95rem; letter-spacing: 1px; border-bottom: 2px solid #592518; padding-bottom: 4px;">
+        View All Products →
+      </a>
+    </div>
+
+    <!-- Responsive Product Grid -->
+    <div class="swiper product-swiper open-up" data-aos="fade-up">
+      <div class="swiper-wrapper">
+
+        {% for product in new_arrivals %}
+        <div class="swiper-slide">
+          <div class="product-item image-zoom-effect link-effect h-100">
+            
+            <!-- Image Container -->
+            <div class="image-holder position-relative overflow-hidden" style="border-radius: 16px; background: #f5eedf;">
+              <a href="{% url 'product_detail' product.id %}">
+                <img src="{{ product.image.url }}" 
+                     alt="{{ product.name }}"
+                     class="product-image img-fluid w-100"
+                     style="height: 380px; object-fit: cover; transition: transform 0.7s ease;">
+              </a>
+
+              <!-- Wishlist Button - Filled if already in wishlist -->
+              <a href="#" class="btn-icon btn-wishlist position-absolute top-0 end-0 m-3" 
+                 data-product-id="{{ product.id }}"
+                 style="background: rgba(255,255,255,0.95); width: 44px; height: 44px; border-radius: 50%; 
+                        display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(89,37,24,0.2); 
+                        z-index: 20; transition: all 0.3s ease;">
+                <i class="fa-heart fa-lg 
+                         {% if product.id in wishlist_product_ids %}fas text-danger{% else %}far{% endif %}" 
+                   style="color: #592518;"></i>
+              </a>
+
+              <!-- Hover Add to Cart Overlay -->
+              <div class="product-overlay position-absolute bottom-0 start-0 w-100 py-4 px-4 text-center" 
+                   style="background: linear-gradient(to top, rgba(89,37,24,0.90), transparent); 
+                          opacity: 0; transition: all 0.4s ease;">
+         {% if request.session.customer_id %}
+    <!-- User is logged in - Normal Add to Cart -->
+    <form action="{% url 'add_to_cart' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <input type="hidden" name="product" value="{{ product.id }}">
+        <input type="hidden" name="quantity" value="1">
+        <button type="submit" class="btn btn-dark btn-sm text-uppercase">
+            Add to Cart
+        </button>
+    </form>
+{% else %}
+    <!-- User NOT logged in - Show Login Prompt -->
+    <button onclick="requireLogin()" 
+            class="btn btn-dark btn-sm text-uppercase">
+        Add to Cart
+    </button>
+{% endif %}
+              </div>
+            </div>
+
+            <!-- Product Details -->
+            <div class="product-content mt-4 px-2">
+              <h5 class="element-title text-uppercase fw-medium mb-2" 
+                  style="font-family: var(--heading-font); color: #592518; font-size: 1.18rem; letter-spacing: 1px; line-height: 1.3;">
+                <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
+                  {{ product.name }}
+                </a>
+              </h5>
+              
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="fw-semibold fs-5" style="color: #592518;">
+                  ₹{{ product.price }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+          <p class="text-muted fs-5">No new arrivals available at the moment.</p>
+        </div>
+        {% endfor %}
+
+      </div>
+
+      <!-- Swiper Pagination -->
+      <div class="swiper-pagination mt-5"></div>
+    </div>
+
+    <!-- Navigation Arrows -->
+    <div class="icon-arrow icon-arrow-left" style="top: 45%;">
+      <svg width="50" height="50" viewBox="0 0 24 24">
+        <use xlink:href="#arrow-left"></use>
+      </svg>
+    </div>
+    <div class="icon-arrow icon-arrow-right" style="top: 45%;">
+      <svg width="50" height="50" viewBox="0 0 24 24">
+        <use xlink:href="#arrow-right"></use>
+      </svg>
+    </div>
+
+  </div>
+</section>
+<style>
+  /* Responsive Grid: 2 on mobile, 4 on desktop */
+  .product-swiper .swiper-slide { width: 50%; }
+  @media (min-width: 992px) {
+    .product-swiper .swiper-slide { width: 25%; }
+  }
+
+  .product-item:hover .product-overlay { opacity: 1; }
+  .product-item:hover img { transform: scale(1.05); }
+</style>
+<script>
+$(document).ready(function() {
+  // Wishlist Toggle
+  $('.btn-wishlist').on('click', function(e) {
+    e.preventDefault();
+    var productId = $(this).data('product-id');
+    var $icon = $(this).find('i');
+
+    $.ajax({
+      type: "POST",
+      url: "{% url 'add_to_wishlist' 0 %}".replace('0', productId),
+      data: {
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+      },
+      success: function(response) {
+        if (response.status === 'added') {
+          $icon.removeClass('far').addClass('fas text-danger');
+          alert("Added to Wishlist ❤️");
+        } else if (response.status === 'removed') {
+          $icon.removeClass('fas text-danger').addClass('far');
+          alert("Removed from Wishlist");
+        }
+      }
+    });
+  });
+});
+</script>
+
+
+  <section class="collection  position-relative py-5">
+    <div class="container">
+      <div class="row">
+        <div class="title-xlarge text-uppercase txt-fx domino">Collection</div>
+        <div class="collection-item d-flex flex-wrap my-5">
+          <div class="col-md-6 column-container">
+            <div class="image-holder">
+              <img src="{% static 'images/single-image-2.jpg' %}" alt="collection" class="product-image img-fluid">
+            </div>
+          </div>
+          <div class="col-md-6 column-container bg-white">
+            <div class="collection-content p-5 m-0 m-md-5">
+              <h3 class="element-title text-uppercase">The CICADA RISE Story</h3>
+              <p>Curated for the modern wardrobe. Explore our premium collection of versatile, beautifully tailored
+                styles designed to inspire confidence in every step.</p>
+              <a href="{% url 'shop' %}" class="btn btn-dark text-uppercase mt-3">Shop Collection</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="video py-5 overflow-hidden">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="video-content open-up" data-aos="zoom-out">
+          <div class="video-bg">
+            <img src="{% static 'images/video-image.jpg' %}" alt="video" class="video-image img-fluid">
+          </div>
+          <div class="video-player">
+            <a class="youtube" href="https://www.youtube.com/embed/pjtsGzQjFM4">
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <use xlink:href="#play"></use>
+              </svg>
+              <img src="{% static 'images/text-pattern.png' %}" alt="pattern" class="text-rotate">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials py-5 " style="background-color: #ffffff;;">
+    <div class="section-header text-center mt-5">
+      <h3 class="section-title" >WE LOVE GOOD COMPLIMENT</h3>
+    </div>
+    <div class="swiper testimonial-swiper overflow-hidden my-5">
+      <div class="swiper-wrapper d-flex">
+        <div class="swiper-slide ">
+          <div class="testimonial-item text-center">
+            <blockquote>
+              <p>“More than expected crazy soft, flexible and best fitted white simple denim shirt.”</p>
+              <div class="review-title text-uppercase">casual way</div>
+            </blockquote>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="testimonial-item text-center">
+            <blockquote>
+              <p>“Best fitted white denim shirt more than expected crazy soft, flexible</p>
+              <div class="review-title text-uppercase">uptop</div>
+            </blockquote>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="testimonial-item text-center">
+            <blockquote>
+              <p>“Best fitted white denim shirt more white denim than expected flexible crazy soft.”</p>
+              <div class="review-title text-uppercase">Denim craze</div>
+            </blockquote>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="testimonial-item text-center">
+            <blockquote>
+              <p>“Best fitted white denim shirt more than expected crazy soft, flexible</p>
+              <div class="review-title text-uppercase">uptop</div>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-swiper-pagination d-flex justify-content-center mb-5"></div>
+  </section>
+
+
+  <section class="blog py-5">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mt-5 mb-3">
+        <h4 class="text-uppercase" >The CICADA RISE Journal</h4>
+        <a  href="#" class="btn-link">View All</a>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <article class="post-item">
+            <div class="post-image">
+              <a href="#">
+                <img src="{% static 'images/post-image1.jpg' %}" alt="image" class="post-grid-image img-fluid">
+              </a>
+            </div>
+            <div class="post-content d-flex flex-wrap gap-2 my-3">
+              <div class="post-meta text-uppercase fs-6 text-secondary">
+                <span class="post-category">Fashion /</span>
+                <span class="meta-day"> jul 11, 2022</span>
+              </div>
+              <h5 class="post-title text-uppercase">
+                <a href="#" >The Art of the Capsule Wardrobe</a>
+              </h5>
+              <p>Building a timeless wardrobe doesn't require endless options—just the right ones. Discover the five
+                versatile essentials...</p>
+            </div>
+          </article>
+        </div>
+        <div class="col-md-4">
+          <article class="post-item">
+            <div class="post-image">
+              <a href="#">
+                <img src="{% static 'images/post-image2.jpg' %}" alt="image" class="post-grid-image img-fluid">
+              </a>
+            </div>
+            <div class="post-content d-flex flex-wrap gap-2 my-3">
+              <div class="post-meta text-uppercase fs-6 text-secondary">
+                <span class="post-category">Fashion /</span>
+                <span class="meta-day"> jul 11, 2022</span>
+              </div>
+              <h5 class="post-title text-uppercase">
+                <a href="#" >How to Style Co-ords</a>
+              </h5>
+              <p>Matching sets are the ultimate styling hack for the modern woman. From polished office looks to relaxed
+                weekend brunches...</p>
+            </div>
+          </article>
+        </div>
+        <div class="col-md-4">
+          <article class="post-item">
+            <div class="post-image">
+              <a href="#">
+                <img src="{% static 'images/post-image3.jpg' %}" alt="image" class="post-grid-image img-fluid">
+              </a>
+            </div>
+            <div class="post-content d-flex flex-wrap gap-2 my-3">
+              <div class="post-meta text-uppercase fs-6 text-secondary">
+                <span class="post-category">Fashion /</span>
+                <span class="meta-day"> jul 11, 2022</span>
+              </div>
+              <h5 class="post-title text-uppercase">
+                <a href="#" >Crazy fashion with unique moment</a>
+              </h5>
+              <p>Turpis purus, gravida orci, fringilla dignissim lacus, turpis ut suspendisse vel tellus...</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- newsletter starts -->
+  <!-- <section class="newsletter ">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8 py-5 my-5">
+          <div class="subscribe-header text-center pb-3" style="margin-top:-20px">
+            <h3 class="section-title text-uppercase" >Sign Up for our newsletter</h3>
+          </div>
+          <form id="form" class="d-flex flex-wrap gap-2">
+            <input type="text" name="email" placeholder="Your Email Addresss" class="form-control form-control-lg">
+            <button class="btn btn-dark btn-lg text-uppercase w-100">Sign Up</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section> -->
+  <!-- newsletter ends -->
+  <section class="instagram position-relative">
+    <div class="d-flex justify-content-center w-100 position-absolute bottom-0 z-1">
+      <a href="https://www.instagram.com/_cicadaofficial_/" class="btn btn-dark px-5">Follow us on Instagram</a>
+    </div>
+    <div class="row g-0">
+      <div class="col-6 col-sm-4 col-md-2">
+        <div class="insta-item">
+          <a href="https://www.instagram.com/_cicadaofficial_/" target="_blank">
+            <img src="{% static 'images/insta-item1.jpg' %}" alt="instagram" class="insta-image img-fluid">
+          </a>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-2">
+        <div class="insta-item">
+          <a href="https://www.instagram.com/_cicadaofficial_/" target="_blank">
+            <img src="{% static 'images/insta-item2.jpg' %}" alt="instagram" class="insta-image img-fluid">
+          </a>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-2">
+        <div class="insta-item">
+          <a href="https://www.instagram.com/_cicadaofficial_/" target="_blank">
+            <img src="{% static 'images/insta-item3.jpg' %}" alt="instagram" class="insta-image img-fluid">
+          </a>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-2">
+        <div class="insta-item">
+          <a href="https://www.instagram.com/templatesjungle/" target="_blank">
+            <img src="{% static 'images/insta-item4.jpg' %}" alt="instagram" class="insta-image img-fluid">
+          </a>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-2">
+        <div class="insta-item">
+          <a href="https://www.instagram.com/templatesjungle/" target="_blank">
+            <img src="{% static 'images/insta-item5.jpg' %}" alt="instagram" class="insta-image img-fluid">
+          </a>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-2">
+        <div class="insta-item">
+          <a href="https://www.instagram.com/templatesjungle/" target="_blank">
+            <img src="{% static 'images/insta-item6.jpg' %}" alt="instagram" class="insta-image img-fluid">
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+<footer class="footer-dark mt-5 pt-5" style="background: #592518; color: #e8e8e8; font-family: 'Poppins', sans-serif;">
+
+    <div class="container pb-5">
+        <div class="row gy-5">
+
+            <!-- Brand & Story -->
+            <div class="col-lg-3 col-md-6">
+                <div class="mb-4">
+                    <a href="{% url 'index' %}" 
+                       style="font-size: 2rem; font-weight: 600; letter-spacing: 3px; color: #e6d5c3; text-decoration: none;">
+                        CICADA RISE
+                    </a>
+                </div>
+
+                <p style="line-height: 1.8; opacity: 0.8;">
+                    For the woman emerging into her power — bold, timeless and beautifully her.
+                </p>
+
+                <div class="d-flex gap-3 mt-4">
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-lg-2 col-md-6">
+                <h6 class="footer-title">Quick Links</h6>
+                <ul class="footer-links list-unstyled">
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="{% url 'shop' %}">Shop</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Customer Care -->
+            <div class="col-lg-3 col-md-6">
+                <h6 class="footer-title">Customer Support</h6>
+                <ul class="footer-links list-unstyled">
+                    <li><a href="#">Track Order</a></li>
+                    <li><a href="#">Returns & Exchanges</a></li>
+                    <li><a href="#">Shipping & Delivery</a></li>
+                    <li><a href="{% url 'contact' %}">FAQs</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div class="col-lg-4 col-md-6">
+                <h6 class="footer-title">Contact</h6>
+
+                <p class="mb-1" style="opacity: 0.8;">Have a question? We're here to assist.</p>
+
+                <p class="mt-3">
+                    <a href="mailto:care@cicadarise.com" class="footer-mail">
+                        cicadaofficial@gmail.com
+                    </a>
+                </p>
+
+                <p>
+                    <a href="tel:+918086273188" class="footer-mail">
+                        +91 80862 73188
+                    </a>
+                </p>
+
+                <p class="small mt-3" style="opacity: 0.8; line-height: 1.6;">
+                    Visit our studio — discover craftsmanship and elegance up close.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <!-- <div class="py-4 border-top border-secondary-subtle text-center small" style="background: #592518;">
+        © 2026 CICADA RISE · Crafted with patience & passion
+    </div> -->
+</footer>
+
+<style>
+    .footer-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1.2rem;
+        color: #e6d5c3;
+    }
+
+    .footer-links li {
+        margin-bottom: 0.6rem;
+    }
+
+    .footer-links a {
+        text-decoration: none;
+        color: #e8e8e8;
+        font-size: 0.95rem;
+        opacity: 0.7;
+        transition: 0.3s;
+    }
+
+    .footer-links a:hover {
+        opacity: 1;
+        letter-spacing: 0.5px;
+        color: #e6d5c3;
+    }
+
+    .social-icon {
+        width: 38px;
+        height: 38px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #1b1b1b;
+        color: #e6d5c3;
+        border-radius: 50%;
+        font-size: 1.1rem;
+        transition: 0.3s ease;
+        text-decoration: none;
+    }
+
+    .social-icon:hover {
+        background: #e6d5c3;
+        color: #000;
+        transform: translateY(-3px);
+    }
+
+    .footer-mail {
+        text-decoration: none;
+        color: #e6d5c3;
+        font-weight: 500;
+    }
+
+    .footer-mail:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+    }
+</style>
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/plugins.js' %}"></script>
+  <script src="{% static 'js/SmoothScroll.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+  <script src="{% static 'js/script.min.js' %}"></script>
+
+<script>
+  $(document).ready(function() {
+    $('.btn-wishlist, .btn-wishlist-single').on('click', function(e) {
+      e.preventDefault();
+      var productId = $(this).data('product-id');
+      if(productId) {
+        $.ajax({
+          type: "POST",
+          url: "{% url 'add_to_wishlist' 0 %}".replace('0', productId),
+          data: {
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          },
+          success: function(response) {
+            $('.wishlist-count').text('(' + response.wishlist_count + ')');
+            alert("Added to Wishlist!");
+          }
+        });
+      }
+    });
+
+    $('.add-to-cart-btn').on('click', function(e) {
+      e.preventDefault();
+      var productId = $(this).data('product-id');
+      if(productId) {
+        $.ajax({
+          type: "POST",
+          url: "{% url 'add_to_cart' %}",
+          data: {
+            'product': productId,
+            'quantity': 1,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          },
+          success: function(response) {
+            if(response.success) {
+                $('.cart-count').text('(' + response.total_items + ')');
+                alert("Added to Cart!");
+            }
+          }
+        });
+      }
+    });
+  });
+</script>
+</body>
+
+</html>

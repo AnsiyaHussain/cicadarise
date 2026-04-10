@@ -1,0 +1,93 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - CICADA RISE</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #592518;
+            --accent: #8C907E;
+            --bg: #ece1d2;
+            --light: #f5eedf;
+        }
+        body {
+            background-color: var(--bg);
+            font-family: 'Jost', sans-serif;
+        }
+        .account-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(89, 37, 24, 0.08);
+            padding: 40px;
+        }
+        .section-title {
+            font-family: var(--heading-font);
+            color: var(--primary);
+            letter-spacing: 3px;
+        }
+    </style>
+</head>
+<body>
+
+  {% include 'navbar.html' %}
+
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="account-card text-center">
+          <i class="fas fa-user-circle fa-6x mb-4" style="color: var(--primary); opacity: 0.85;"></i>
+          <h2 class="section-title mb-4">My Account</h2>
+
+          <div class="row text-start justify-content-center">
+            <div class="col-md-8">
+              <table class="table table-borderless">
+                <tr>
+                  <th style="width: 40%; color: #666;">Full Name</th>
+                  <td>{{ customer.first_name }} {{ customer.last_name }}</td>
+                </tr>
+                <tr>
+                  <th style="color: #666;">Email</th>
+                  <td>{{ customer.email }}</td>
+                </tr>
+                <tr>
+                  <th style="color: #666;">Phone</th>
+                  <td>{{ customer.phone }}</td>
+                </tr>
+                <tr>
+                  <th style="color: #666;">Member Since</th>
+                  <td>{{ customer.date_joined|date:"d M Y" }}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="d-grid gap-3 mt-5">
+            <a href="{% url 'my_orders' %}" class="btn btn-outline-dark py-3">
+              <i class="fas fa-box me-2"></i> My Orders
+            </a>
+            <a href="{% url 'wishlist' %}" class="btn btn-outline-dark py-3">
+              <i class="far fa-heart me-2"></i> My Wishlist
+            </a>
+            <a href="{% url 'logout' %}" class="btn btn-danger py-3">
+              <i class="fas fa-sign-out-alt me-2"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'footer.html' %}
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

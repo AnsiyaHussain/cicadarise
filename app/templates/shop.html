@@ -1,0 +1,203 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - CICADA RISE</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #592518;
+            --accent: #8C907E;
+            --bg: #ece1d2;
+            --light: #f5eedf;
+        }
+        body {
+            background-color: var(--bg);
+            font-family: 'Jost', sans-serif;
+        }
+        .section-title {
+            font-family: var(--heading-font);
+            color: var(--primary);
+            letter-spacing: 3px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(89, 37, 24, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(89, 37, 24, 0.15);
+        }
+        .product-image {
+            height: 280px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .product-card:hover .product-image {
+            transform: scale(1.06);
+        }
+        .filter-select {
+            border: 2px solid #d4c3b0;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-size: 1.05rem;
+        }
+        .search-input {
+            border: 2px solid #d4c3b0;
+            border-radius: 50px;
+            padding: 14px 24px;
+        }
+        .btn-add-cart {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 8px 24px;
+            font-size: 0.9rem;
+        }
+        .wishlist-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+
+  {% include 'navbar.html' %}
+
+  <div class="container py-5">
+
+    <!-- Page Header -->
+    <div class="text-center mb-5">
+      <h1 class="section-title display-5 fw-light">Our Collection</h1>
+      <p class="lead text-muted">Discover timeless pieces crafted for the modern woman</p>
+    </div>
+
+    <!-- Search + Category Filter -->
+    <div class="row mb-5">
+      <div class="col-lg-8 mx-auto">
+        <div class="row g-3">
+          
+          <!-- Search Bar -->
+          <div class="col-md-7">
+            <form method="GET" action="{% url 'shop' %}">
+              <div class="input-group">
+                <input type="text" name="q" class="form-control search-input" 
+                       placeholder="Search dresses, tops, kurtas..." 
+                       value="{{ request.GET.q }}">
+                <button class="btn btn-outline-dark px-4" type="submit">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Category Dropdown -->
+          <div class="col-md-5">
+            <select class="form-select filter-select" onchange="if(this.value) window.location = this.value;">
+              <option value="{% url 'shop' %}">All Categories</option>
+              {% for cat in categories %}
+              <option value="{% url 'shop' %}?category={{ cat.id }}" 
+                      {% if request.GET.category|add:0 == cat.id %}selected{% endif %}>
+                {{ cat.name }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="row g-4">
+      {% for product in products %}
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="product-card">
+          <div class="position-relative">
+            <a href="{% url 'product_detail' product.id %}">
+              <img src="{{ product.image.url }}" 
+                   alt="{{ product.name }}" 
+                   class="product-image w-100">
+            </a>
+
+            <!-- Wishlist -->
+            <button onclick="toggleWishlist({{ product.id }}, this)" 
+                    class="btn btn-light wishlist-btn position-absolute top-0 end-0 m-3 shadow-sm">
+              <i class="fa-heart fa-lg" id="heart-{{ product.id }}"
+                 style="color: {% if product.id in wishlist_product_ids %}#e63939{% else %}#592518{% endif %};">
+              </i>
+            </button>
+          </div>
+
+          <div class="p-3">
+            <h6 class="fw-medium mb-2" style="color: var(--primary); line-height: 1.3;">
+              <a href="{% url 'product_detail' product.id %}" style="color: inherit; text-decoration: none;">
+                {{ product.name }}
+              </a>
+            </h6>
+            
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="fw-bold fs-5" style="color: var(--primary);">₹{{ product.price }}</span>
+              
+              <form action="{% url 'add_to_cart' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="product" value="{{ product.id }}">
+                <button type="submit" class="btn btn-add-cart btn-sm">Add</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5">
+        <h4 style="color: #592518;">No products found.</h4>
+        <p class="text-muted">Try changing the category or search term.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% include 'footer.html' %}
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function toggleWishlist(productId, btn) {
+      const icon = document.getElementById(`heart-${productId}`);
+      
+      fetch(`/add-to-wishlist/${productId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}',
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'added') {
+          icon.classList.remove('far');
+          icon.classList.add('fas');
+          icon.style.color = '#e63939';
+        } else if (data.status === 'removed') {
+          icon.classList.remove('fas');
+          icon.classList.add('far');
+          icon.style.color = '#592518';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

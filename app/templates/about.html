@@ -1,0 +1,164 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - CICADA RISE</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Marcellus&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #592518;
+            --accent: #8C907E;
+            --bg: #ece1d2;
+            --light: #f5eedf;
+        }
+        body {
+            background-color: var(--bg);
+            font-family: 'Jost', sans-serif;
+        }
+        .section-title {
+            font-family: var(--heading-font);
+            color: var(--primary);
+            letter-spacing: 4px;
+            font-weight: 300;
+        }
+        .hero-about {
+            background: linear-gradient(rgba(89,37,24,0.65), rgba(89,37,24,0.75)), 
+                        url('{% static "images/about-hero.jpg" %}') center/cover no-repeat;
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            color: white;
+            position: relative;
+        }
+        .cicada-symbol {
+            font-size: 6rem;
+            opacity: 0.12;
+            color: white;
+        }
+        .story-image {
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(89,37,24,0.15);
+        }
+        .value-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(89,37,24,0.08);
+            transition: all 0.3s ease;
+        }
+        .value-card:hover {
+            transform: translateY(-8px);
+        }
+    </style>
+</head>
+<body>
+
+  {% include 'navbar.html' %}
+
+  <!-- Hero Section -->
+  <section class="hero-about text-center">
+    <div class="container">
+      <span class="cicada-symbol">🪲</span>
+      <h1 class="display-4 fw-light mt-4 mb-3" style="letter-spacing: 6px;">CICADA RISE</h1>
+      <p class="lead fst-italic" style="max-width: 680px; margin: 0 auto; font-size: 1.4rem;">
+        Like the cicada that emerges after years of quiet growth —<br>
+        every woman deserves her moment to rise, transform, and shine.
+      </p>
+    </div>
+  </section>
+
+  <!-- Our Story -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row g-5 align-items-center">
+        <div class="col-lg-6">
+          <img src="{% static 'images/about-story.jpg' %}" alt="Our Story" 
+               class="story-image img-fluid w-100">
+        </div>
+        <div class="col-lg-6">
+          <h2 class="section-title mb-4">Our Story</h2>
+          <div class="story-text" style="font-size: 1.15rem; line-height: 1.95; color: #4a3e3d;">
+            <p>
+              CICADA RISE was born from the belief that every woman carries within her a powerful story of growth, 
+              resilience, and transformation — often hidden beneath the surface, just like the cicada.
+            </p>
+            <p>
+              We create clothing that celebrates this journey. Pieces that are timeless yet modern, 
+              elegant yet empowering — designed for the woman who is ready to emerge into her fullest self.
+            </p>
+            <p>
+              Each garment is crafted with intention, using premium fabrics and thoughtful details, 
+              so you feel confident, beautiful, and unapologetically yourself.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What We Stand For -->
+  <section class="py-5 bg-white">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="section-title">What CICADA RISE Stands For</h2>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="value-card">
+            <i class="fas fa-seedling fa-3x mb-4" style="color: #592518;"></i>
+            <h5 class="fw-medium">Growth</h5>
+            <p class="text-muted">Quiet strength that builds over time, leading to powerful transformation.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="value-card">
+            <i class="fas fa-feather fa-3x mb-4" style="color: #592518;"></i>
+            <h5 class="fw-medium">Emergence</h5>
+            <p class="text-muted">The beautiful moment when a woman steps into her light and is finally seen.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="value-card">
+            <i class="fas fa-heart fa-3x mb-4" style="color: #592518;"></i>
+            <h5 class="fw-medium">Empowerment</h5>
+            <p class="text-muted">Fashion that makes you feel strong, confident, and authentically yourself.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Closing Message -->
+  <section class="py-5 text-center" style="background: #f5eedf;">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <p style="font-size: 1.45rem; font-style: italic; color: #592518; line-height: 1.7;">
+            We don’t just design clothes.<br>
+            We create moments of emergence.
+          </p>
+          <div class="mt-5">
+            <a href="{% url 'shop' %}" class="btn btn-lg px-5 py-3 text-uppercase" 
+               style="background-color: #592518; color: white; border-radius: 50px; letter-spacing: 2px;">
+              Explore The Collection
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% include 'footer.html' %}
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

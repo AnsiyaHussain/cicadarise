@@ -1,0 +1,272 @@
+{% load static %}
+{% load cart %}
+{% load custom_filter %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>CICADA RISE - {{ product.name }}</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap + Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <link rel="stylesheet" type="text/css" href="{% static 'css/vendor.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+  <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Marcellus&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #592518;
+      --accent: #8C907E;
+      --bg: #ece1d2;
+      --light: #f5eedf;
+    }
+    body {
+      background-color: var(--bg);
+      font-family: 'Jost', sans-serif;
+    }
+    .product-title {
+      font-family: var(--heading-font);
+      color: var(--primary);
+      letter-spacing: 2px;
+    }
+    .product-price {
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .size-btn.active {
+      background-color: var(--primary) !important;
+      color: white !important;
+      border-color: var(--primary);
+    }
+    .btn-add-cart {
+      background-color: var(--primary);
+      border: none;
+      color: white;
+    }
+    .btn-add-cart:hover {
+      background-color: #3f1c12;
+    }
+    .wishlist-btn {
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+    .wishlist-btn.filled {
+      background-color: var(--primary);
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+  {% include 'navbar.html' %}
+
+  <section id="product-details" class="py-5">
+    <div class="container">
+      <div class="row g-5">
+
+        <!-- Left: Images -->
+        <div class="col-lg-6">
+          <div class="main-image mb-4 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" 
+                 class="img-fluid w-100" id="mainProductImage" style="height: 520px; object-fit: cover;">
+          </div>
+
+          <!-- Thumbnails -->
+          <div class="d-flex gap-3 flex-wrap">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" class="img-thumbnail thumb-img active" 
+                 style="width: 90px; height: 90px; object-fit: cover; cursor: pointer;" 
+                 onclick="changeMainImage(this)">
+            {% endif %}
+            {% if product.image2 %}
+            <img src="{{ product.image2.url }}" class="img-thumbnail thumb-img" 
+                 style="width: 90px; height: 90px; object-fit: cover; cursor: pointer;" 
+                 onclick="changeMainImage(this)">
+            {% endif %}
+            {% if product.image3 %}
+            <img src="{{ product.image3.url }}" class="img-thumbnail thumb-img" 
+                 style="width: 90px; height: 90px; object-fit: cover; cursor: pointer;" 
+                 onclick="changeMainImage(this)">
+            {% endif %}
+            {% if product.image4 %}
+            <img src="{{ product.image4.url }}" class="img-thumbnail thumb-img" 
+                 style="width: 90px; height: 90px; object-fit: cover; cursor: pointer;" 
+                 onclick="changeMainImage(this)">
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Right: Product Info -->
+        <div class="col-lg-6">
+          <h1 class="product-title mb-3">{{ product.name }}</h1>
+          <h3 class="product-price mb-4">₹{{ product.price }}</h3>
+
+          <p class="lead mb-4" style="line-height: 1.8;">{{ product.description }}</p>
+
+          <!-- Size Selection (Mandatory) -->
+          <div class="mb-4">
+            <h5 class="mb-3 fw-medium">Select Size <span class="text-danger">*</span></h5>
+            <div class="d-flex gap-2 flex-wrap" id="size-options">
+              <button type="button" class="btn btn-outline-dark size-btn px-4 py-2" data-size="S">S</button>
+              <button type="button" class="btn btn-outline-dark size-btn px-4 py-2" data-size="M">M</button>
+              <button type="button" class="btn btn-outline-dark size-btn px-4 py-2" data-size="L">L</button>
+              <button type="button" class="btn btn-outline-dark size-btn px-4 py-2" data-size="XL">XL</button>
+            </div>
+            <small id="size-error" class="text-danger d-none">Please select a size</small>
+          </div>
+
+          <!-- Quantity -->
+          <div class="mb-4">
+            <h5 class="mb-3 fw-medium">Quantity</h5>
+            <div class="input-group" style="width: 160px;">
+              <button class="btn btn-outline-dark" type="button" onclick="changeQty(-1)">−</button>
+              <input type="text" id="quantity" class="form-control text-center" value="1" readonly>
+              <button class="btn btn-outline-dark" type="button" onclick="changeQty(1)">+</button>
+            </div>
+          </div>
+
+          <!-- Actions -->
+{% if request.session.customer_id %}
+    <form id="addToCartForm" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="product" value="{{ product.id }}">
+        <input type="hidden" name="quantity" id="form_quantity" value="1">
+        <input type="hidden" name="size" id="form_size" value="">
+        
+        <button type="submit" class="btn btn-dark btn-lg w-100 py-3 text-uppercase">
+            Add to Cart
+        </button>
+    </form>
+{% else %}
+    <button onclick="requireLogin()" 
+            class="btn btn-dark btn-lg w-100 py-3 text-uppercase">
+        Add to Cart
+    </button>
+{% endif %}
+
+          <div class="d-flex gap-4 text-muted small">
+            <span><i class="fas fa-truck"></i> Free shipping over ₹2000</span>
+            <span><i class="fas fa-undo"></i> 14 days easy return</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- You May Also Like -->
+  <section class="related-products py-5 bg-white">
+    <div class="container">
+      <h4 class="text-uppercase mb-4 text-center" style="color: #592518;">You May Also Like</h4>
+      <div class="row g-4">
+        {% for related in related_products %}
+        <div class="col-md-3 col-6">
+          <div class="product-item text-center">
+            <a href="{% url 'product_detail' related.id %}">
+              <img src="{{ related.image.url }}" alt="{{ related.name }}" 
+                   class="img-fluid rounded mb-3" style="height: 280px; object-fit: cover;">
+            </a>
+            <h6 class="mb-1">{{ related.name }}</h6>
+            <p class="mb-0" style="color: #592518;">₹{{ related.price }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {% include 'footer.html' %}   <!-- or paste your footer -->
+
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    let selectedSize = '';
+
+    // Size Selection
+    document.querySelectorAll('.size-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedSize = btn.dataset.size;
+        document.getElementById('form_size').value = selectedSize;
+        document.getElementById('size-error').classList.add('d-none');
+      });
+    });
+
+    // Quantity
+    function changeQty(change) {
+      let qty = parseInt(document.getElementById('quantity').value);
+      qty = Math.max(1, qty + change);
+      document.getElementById('quantity').value = qty;
+      document.getElementById('form_quantity').value = qty;
+    }
+
+    // Change Main Image
+    function changeMainImage(img) {
+      document.getElementById('mainProductImage').src = img.src;
+      document.querySelectorAll('.thumb-img').forEach(el => el.classList.remove('active'));
+      img.classList.add('active');
+    }
+
+    // Add to Cart with Size Validation
+    $('#addToCartForm').on('submit', function(e) {
+      e.preventDefault();
+
+      if (!selectedSize) {
+        document.getElementById('size-error').classList.remove('d-none');
+        return;
+      }
+
+      $.ajax({
+        type: "POST",
+        url: "{% url 'add_to_cart' %}",
+        data: $(this).serialize(),
+        success: function(response) {
+          alert("Added to Cart successfully!");
+          // Optional: update cart count in navbar
+        },
+        error: function() {
+          alert("Failed to add to cart. Please try again.");
+        }
+      });
+    });
+
+    // Wishlist
+    $('.btn-wishlist-single').on('click', function(e) {
+      e.preventDefault();
+      var productId = $(this).data('product-id');
+      var $icon = $(this).find('i');
+
+      $.ajax({
+        type: "POST",
+        url: "{% url 'add_to_wishlist' 0 %}".replace('0', productId),
+        data: { 'csrfmiddlewaretoken': '{{ csrf_token }}' },
+        success: function(response) {
+          if (response.status === 'added') {
+            $icon.removeClass('far').addClass('fas text-danger');
+            alert("Added to Wishlist ❤️");
+          } else if (response.status === 'removed') {
+            $icon.removeClass('fas text-danger').addClass('far');
+            alert("Removed from Wishlist");
+          }
+        }
+      });
+    });
+  </script>
+  <script>
+function requireLogin() {
+    if (confirm("You need to login to add items to your cart.\n\nWould you like to login now?")) {
+        window.location.href = "{% url 'login' %}";
+    }
+}
+</script>
+</body>
+</html>

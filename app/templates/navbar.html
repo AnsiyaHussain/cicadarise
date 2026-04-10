@@ -1,0 +1,170 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg text-uppercase fs-6 p-3 border-bottom align-items-center"
+     style="background-color: #ffffff; box-shadow: 0 2px 15px rgba(89, 37, 24, 0.08);">
+
+  <div class="container-fluid">
+    <div class="row justify-content-between align-items-center w-100">
+
+      <!-- Brand Logo -->
+      <div class="col-auto">
+        <a class="navbar-brand" href="{% url 'index' %}">
+          <img src="{% static 'images/cicadalogo.png' %}" 
+               alt="CICADA RISE" 
+               style="height: 186px; width: auto; object-fit: contain; margin-top:-70px; margin-bottom:-85px; margin-left: -30px;">
+        </a>
+      </div>
+
+      <!-- Mobile Toggle -->
+      <div class="col-auto d-lg-none">
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+
+      <!-- Main Menu -->
+      <div class="offcanvas offcanvas-end d-lg-flex" id="offcanvasNavbar">
+        <div class="offcanvas-header d-lg-none">
+          <h5 class="offcanvas-title">Menu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1 gap-1 gap-md-5 pe-3">
+
+            <!-- Home -->
+            <li class="nav-item">
+              <a class="nav-link custom-active {% if request.resolver_match.url_name == 'index' %}active{% endif %}" 
+                 href="{% url 'index' %}">Home</a>
+            </li>
+
+            <!-- About -->
+            <li class="nav-item">
+              <a class="nav-link custom-active {% if request.resolver_match.url_name == 'about' %}active{% endif %}" 
+                 href="{% url 'about' %}">About</a>
+            </li>
+
+            <!-- Shop -->
+            <li class="nav-item">
+              <a class="nav-link custom-active {% if request.resolver_match.url_name == 'shop' %}active{% endif %}" 
+                 href="{% url 'shop' %}">Shop</a>
+            </li>
+
+            <!-- Contact -->
+            <li class="nav-item">
+              <a class="nav-link custom-active {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" 
+                 href="{% url 'contact' %}">Contact</a>
+            </li>
+
+            <!-- Wishlist -->
+            <li class="nav-item">
+              <a href="{% url 'wishlist' %}" 
+                 class="nav-link position-relative custom-active 
+                        {% if request.resolver_match.url_name == 'wishlist' %}active{% endif %}">
+                <i class="far fa-heart fa-xl"></i>
+                {% if wishlist_count and wishlist_count > 0 %}
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                      style="font-size: 0.65rem; padding: 2px 6px;">
+                  {{ wishlist_count }}
+                </span>
+                {% endif %}
+              </a>
+            </li>
+
+            <!-- Cart -->
+            <li class="nav-item">
+              <a href="{% url 'cart' %}" 
+                 class="nav-link position-relative custom-active 
+                        {% if request.resolver_match.url_name == 'cart' %}active{% endif %}"
+                 data-bs-toggle="offcanvas" 
+                 data-bs-target="#offcanvasCart">
+                <i class="fas fa-shopping-bag fa-xl"></i>
+                {% if cart and cart.items %}
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark"
+                      style="font-size: 0.65rem; padding: 2px 6px;">
+                  {{ cart.items|length }}
+                </span>
+                {% endif %}
+              </a>
+            </li>
+
+            <!-- Account Dropdown -->
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle custom-active" id="accountDropdown"
+                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user fa-xl"></i>
+              </a>
+
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown"
+                  style="border-radius: 16px; box-shadow: 0 10px 30px rgba(89, 37, 24, 0.15); min-width: 210px; border: none;">
+                {% if request.session.customer_id %}
+                  <li><a class="dropdown-item" href="{% url 'my_account' %}"><i class="fas fa-user me-2"></i> My Account</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'my_orders' %}"><i class="fas fa-box me-2"></i> My Orders</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                {% else %}
+                  <li><a class="dropdown-item" href="{% url 'login' %}"><i class="fas fa-sign-in-alt me-2"></i> Login</a></li>
+                  <li><a class="dropdown-item" href="{% url 'signup' %}"><i class="fas fa-user-plus me-2"></i> Sign Up</a></li>
+                {% endif %}
+              </ul>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<style>
+  /* Premium Navbar - Bold on Hover & Active */
+  .nav-link.custom-active {
+      color: #592518 !important;
+      font-weight: 500;
+      transition: all 0.3s ease;
+  }
+
+  /* Bold on Hover */
+  .nav-link.custom-active:hover {
+      color: #8C907E !important;
+      font-weight: 700;           /* Bold when hovering */
+  }
+
+  /* Bold when Active (Selected Page) */
+  .nav-link.custom-active.active {
+      color: #000000 !important;
+      font-weight: 700;           /* Bold when page is selected */
+  }
+
+  /* Dropdown Styling */
+  .dropdown-menu {
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(183, 46, 11, 0.15);
+      padding: 12px 0;
+  }
+
+  .dropdown-item {
+      color: #592518;
+      padding: 10px 24px;
+      font-weight: 500;
+  }
+
+  .dropdown-item:hover {
+      background-color: #f5eedf;
+      color: #8C907E;
+      font-weight: 600;
+  }
+
+  /* Badge Styling */
+  .badge.bg-danger {
+      background-color: #8C412E !important;
+  }
+
+  .badge.bg-warning {
+      background-color: #c2ad9e !important;
+      color: #3a170f !important;
+  }
+</style>
